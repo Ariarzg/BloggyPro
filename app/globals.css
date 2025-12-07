@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* @theme inline {
+@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -110,9 +110,10 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-} */
+}
 
-:root {
+/* Claymorphism Theme (https://tweakcn.com) */
+/* :root {
   --background: oklch(0.9232 0.0026 48.7171);
   --foreground: oklch(0.2795 0.0368 260.031);
   --card: oklch(0.9699 0.0013 106.4238);
@@ -281,7 +282,7 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
-}
+} */
 
 @layer base {
   * {
