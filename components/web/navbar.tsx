@@ -8,6 +8,7 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "../ui/skeleton";
+import { Menu } from "lucide-react";
 
 export function Navbar() {
   const { isAuthenticated, isLoading } = useConvexAuth();
@@ -16,13 +17,16 @@ export function Navbar() {
 
   return (
     <nav className="w-full py-5 flex items-center justify-between">
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-4 sm:gap-8">
+        <div>
+          <Menu className="size-6 sm:hidden" />
+        </div>
         <Link href="/">
           <h1 className="text-3xl font-bold">
-            Next<span className="text-blue-500">Pro</span>
+            Next<span className="text-primary">Pro</span>
           </h1>
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="items-center gap-2 hidden sm:flex">
           <Link className={buttonVariants({ variant: "ghost" })} href="/">
             Home
           </Link>
