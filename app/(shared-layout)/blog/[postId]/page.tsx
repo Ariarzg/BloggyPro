@@ -1,10 +1,13 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import CommentSection from "@/components/web/commentSection";
+import PostPresence from "@/components/web/postPresence";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { getToken } from "@/lib/auth-server";
 import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { ArrowLeft } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,13 +17,35 @@ interface postIdRouteProps {
   }>;
 }
 
+export const generateMetadata = async ({
+  params,
+}: postIdRouteProps): Promise<Metadata> => {
+  const { postId } = await params;
+
+  const post = await fetchQuery(api.posts.getPostById, { postId });
+
+  if (!post)
+    return {
+      title: "Post not found",
+    };
+
+  return {
+    title: post.title + " | Bloggy",
+    description: post.body,
+  };
+};
+
 const PostIdRoute = async ({ params }: postIdRouteProps) => {
   const { postId } = await params;
 
-  const [post, preloadedComments] = await Promise.all([
+  const token = await getToken();
+
+  const [post, preloadedComments, userId] = await Promise.all([
     fetchQuery(api.posts.getPostById, { postId: postId }),
 
     preloadQuery(api.comments.getCommentsByPostId, { postId }),
+
+    fetchQuery(api.presence.getUserId, {}, { token }),
   ]);
 
   if (!post) {
@@ -53,9 +78,14 @@ const PostIdRoute = async ({ params }: postIdRouteProps) => {
           {post.title}
         </h1>
 
-        <p className="text-sm text-muted-foreground">
-          Posted on: {new Date(post._creationTime).toLocaleDateString("en-DE")}
-        </p>
+        <div className="flex items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            Posted on:{" "}
+            {new Date(post._creationTime).toLocaleDateString("en-DE")}
+          </p>
+
+          {userId && <PostPresence roomId={postId} userId={userId} />}
+        </div>
       </div>
 
       <Separator className="my-8" />

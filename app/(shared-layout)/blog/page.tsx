@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,6 +10,12 @@ import { Suspense } from "react";
 
 export const dynamic = "force-static";
 export const revalidate = 30;
+
+export const metadata: Metadata = {
+  title: "Blog | Bloggy",
+  description: "Insights, thoughts and trends on bloggy",
+  authors: [{ name: "Aria Rouzegar" }],
+};
 
 const BlogPage = () => {
   return (
