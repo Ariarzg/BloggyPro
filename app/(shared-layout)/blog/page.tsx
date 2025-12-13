@@ -7,6 +7,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
+export const dynamic = "force-static";
+export const revalidate = 30;
+
 const BlogPage = () => {
   return (
     <div className="py-12">
