@@ -10,6 +10,7 @@ import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 interface postIdRouteProps {
   params: Promise<{
@@ -47,6 +48,10 @@ const PostIdRoute = async ({ params }: postIdRouteProps) => {
 
     fetchQuery(api.presence.getUserId, {}, { token }),
   ]);
+
+  if (!userId) {
+    return redirect("/auth/login");
+  }
 
   if (!post) {
     return (
