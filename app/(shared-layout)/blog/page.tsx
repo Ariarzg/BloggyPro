@@ -7,9 +7,7 @@ import { fetchQuery } from "convex/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-
-export const dynamic = "force-static";
-export const revalidate = 30;
+import { cacheLife, cacheTag } from "next/cache";
 
 export const metadata: Metadata = {
   title: "Blog | Bloggy",
@@ -39,6 +37,10 @@ const BlogPage = () => {
 };
 
 const Posts = async () => {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("blog");
+
   const data = await fetchQuery(api.posts.getPosts);
 
   return data?.map((post) => (
