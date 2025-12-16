@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "../ui/skeleton";
 import { Menu } from "lucide-react";
+import SearchInput from "./searchInput";
 
 export function Navbar() {
   const { isAuthenticated, isLoading } = useConvexAuth();
@@ -40,6 +41,9 @@ export function Navbar() {
       </div>
 
       <div className="flex items-center gap-2">
+        <div className="hidden md:block mr-2">
+          <SearchInput />
+        </div>
         {isLoading ? (
           <>
             <Skeleton className="h-9 w-[76px]" />
