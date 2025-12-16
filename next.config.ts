@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         port: "",
       },
+      {
+        hostname: "upbeat-dove-474.convex.cloud",
+        protocol: "https",
+        port: "",
+      },
     ],
   },
 };
