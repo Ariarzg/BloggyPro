@@ -24,7 +24,7 @@ export function Navbar() {
         </div>
         <Link href="/">
           <h1 className="text-3xl font-bold">
-            Next<span className="text-primary">Pro</span>
+            Bloggy<span className="text-primary">Pro</span>
           </h1>
         </Link>
         <div className="items-center gap-2 hidden sm:flex">
