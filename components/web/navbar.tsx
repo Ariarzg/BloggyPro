@@ -10,21 +10,42 @@ import { useRouter } from "next/navigation";
 import { Skeleton } from "../ui/skeleton";
 import { Menu } from "lucide-react";
 import SearchInput from "./searchInput";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { Separator } from "../ui/separator";
 
 export function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { isAuthenticated, isLoading } = useConvexAuth();
 
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsNavOpen(false);
+      }
+    }
+
+    if (isNavOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isNavOpen]);
+
   const router = useRouter();
 
   return (
     <nav className="w-full py-5 flex items-center justify-between">
-      <div className="flex items-center gap-4 sm:gap-8">
+      <div className="flex items-center gap-4">
         <div className="relative">
           <Menu
-            className={`size-12 p-2 sm:hidden transition-colors rounded-md duration-300 ${
+            className={`size-12 p-2 md:hidden cursor-pointer transition-colors rounded-md duration-300 ${
               isNavOpen && "bg-popover"
             }`}
             onClick={() => setIsNavOpen((v) => !v)}
@@ -33,6 +54,7 @@ export function Navbar() {
           <AnimatePresence>
             {isNavOpen && (
               <motion.div
+                ref={menuRef}
                 initial={{
                   x: "-200%",
                 }}
@@ -46,24 +68,32 @@ export function Navbar() {
                   duration: 0.3,
                   ease: "easeOut",
                 }}
-                className="p-4 text-popover-foreground bg-popover absolute top-[120%] rounded-md flex gap-2 text-center"
+                className="p-4 text-popover-foreground bg-popover absolute top-[120%] rounded-md flex flex-col gap-4 w-3xs sm:w-auto"
               >
-                <Link
-                  href="/blog"
-                  className={buttonVariants({
-                    variant: "link",
-                  })}
-                >
-                  Blogs
-                </Link>
-                <Link
-                  href="/create"
-                  className={buttonVariants({
-                    variant: "default",
-                  })}
-                >
-                  Create
-                </Link>
+                <div className="flex gap-2 justify-around">
+                  <Link
+                    href="/blog"
+                    className={buttonVariants({
+                      variant: "link",
+                    })}
+                  >
+                    Blogs
+                  </Link>
+                  <Link
+                    href="/create"
+                    className={buttonVariants({
+                      variant: "default",
+                    })}
+                  >
+                    Create
+                  </Link>
+                </div>
+
+                <Separator className="sm:hidden" />
+
+                <div className="sm:hidden">
+                  <SearchInput />
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -74,7 +104,7 @@ export function Navbar() {
             Bloggy<span className="text-primary">Pro</span>
           </h1>
         </Link>
-        <div className="items-center gap-2 hidden sm:flex">
+        <div className="items-center gap-2 hidden md:flex">
           <Link className={buttonVariants({ variant: "ghost" })} href="/blog">
             Blogs
           </Link>
@@ -84,8 +114,8 @@ export function Navbar() {
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <div className="hidden md:block mr-2">
+      <div className="hidden md:flex items-center gap-2">
+        <div className="mr-2">
           <SearchInput />
         </div>
         {isLoading ? (
@@ -133,6 +163,12 @@ export function Navbar() {
           </>
         )}
 
+        <ThemeToggle />
+      </div>
+      <div className="flex items-center gap-2 md:hidden">
+        <div className="hidden sm:block mr-2">
+          <SearchInput />
+        </div>
         <ThemeToggle />
       </div>
     </nav>
