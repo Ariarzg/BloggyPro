@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -19,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -58,13 +60,13 @@ const LoginPage = () => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Login</CardTitle>
+      <CardHeader className="text-center">
+        <CardTitle className="text-xl">Welcome Back</CardTitle>
         <CardDescription>Login to get started right away</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup className="gap-y-4">
+          <FieldGroup>
             <Controller
               name="email"
               control={form.control}
@@ -91,7 +93,6 @@ const LoginPage = () => {
                   <FieldLabel>Password</FieldLabel>
                   <Input
                     aria-invalid={fieldState.invalid}
-                    placeholder="Your Password"
                     type="password"
                     {...field}
                   />
@@ -102,16 +103,22 @@ const LoginPage = () => {
               )}
             />
 
-            <Button disabled={isPending} type="submit">
-              {isPending ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  <span>Loading...</span>
-                </>
-              ) : (
-                <span>Login</span>
-              )}
-            </Button>
+            <Field>
+              <Button disabled={isPending} type="submit">
+                {isPending ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  <span>Login</span>
+                )}
+              </Button>
+              <FieldDescription className="text-center">
+                Don&apos;t have an account?{" "}
+                <Link href="/auth/sign-up">Sign up</Link>
+              </FieldDescription>
+            </Field>
           </FieldGroup>
         </form>
       </CardContent>

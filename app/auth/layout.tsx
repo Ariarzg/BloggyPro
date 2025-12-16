@@ -12,7 +12,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
           Go Back
         </Link>
       </div>
-      <div className="w-full max-w-md mx-auto">{children}</div>
+      <div className="w-full max-w-sm">{children}</div>
     </div>
   );
 };
