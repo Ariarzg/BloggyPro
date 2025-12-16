@@ -19,15 +19,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
 const LoginPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
@@ -91,11 +93,25 @@ const LoginPage = () => {
               render={({ field, fieldState }) => (
                 <Field>
                   <FieldLabel>Password</FieldLabel>
-                  <Input
-                    aria-invalid={fieldState.invalid}
-                    type="password"
-                    {...field}
-                  />
+                  <div className="relative">
+                    <Input
+                      aria-invalid={fieldState.invalid}
+                      type={showPassword ? "text" : "password"}
+                      {...field}
+                      className="pr-10"
+                    />
+                    <span
+                      tabIndex={-1}
+                      onClick={() => setShowPassword((v) => !v)}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer hover:bg-popover p-1 rounded-full"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="size-4" />
+                      ) : (
+                        <Eye className="size-4" />
+                      )}
+                    </span>
+                  </div>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
