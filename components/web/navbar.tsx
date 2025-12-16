@@ -19,10 +19,17 @@ export function Navbar() {
   const { isAuthenticated, isLoading } = useConvexAuth();
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
         setIsNavOpen(false);
       }
     }
@@ -45,6 +52,7 @@ export function Navbar() {
       <div className="flex items-center gap-4">
         <div className="relative">
           <Menu
+            ref={buttonRef}
             className={`size-12 p-2 md:hidden cursor-pointer transition-colors rounded-md duration-300 ${
               isNavOpen && "bg-popover"
             }`}
